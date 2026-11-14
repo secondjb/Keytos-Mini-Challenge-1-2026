@@ -7,22 +7,25 @@ interface BouncingDvdBoxProps {
 }
 
 const COLORS = [
-  'border-emerald-500 shadow-emerald-500/50 bg-emerald-950/90',
-  'border-purple-500 shadow-purple-500/50 bg-purple-950/90',
-  'border-pink-500 shadow-pink-500/50 bg-pink-950/90',
-  'border-cyan-500 shadow-cyan-500/50 bg-cyan-950/90',
-  'border-amber-500 shadow-amber-500/50 bg-amber-950/90',
-  'border-blue-500 shadow-blue-500/50 bg-blue-950/90'
+  'border-emerald-500 shadow-emerald-500/50 bg-emerald-950/95',
+  'border-purple-500 shadow-purple-500/50 bg-purple-950/95',
+  'border-pink-500 shadow-pink-500/50 bg-pink-950/95',
+  'border-cyan-500 shadow-cyan-500/50 bg-cyan-950/95',
+  'border-amber-500 shadow-amber-500/50 bg-amber-950/95',
+  'border-blue-500 shadow-blue-500/50 bg-blue-950/95'
 ];
 
 export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => {
-  const [pos, setPos] = useState<{ x: number; y: number }>({ x: 50, y: 100 });
+  const [pos, setPos] = useState<{ x: number; y: number }>({ x: 60, y: 120 });
   const [colorIdx, setColorIdx] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  
+  // Slower, smoother velocity
   const posRef = useRef<{ x: number; y: number; vx: number; vy: number }>({
-    x: 50,
-    y: 100,
-    vx: 3.2,
-    vy: 2.8,
+    x: 60,
+    y: 120,
+    vx: 1.2,
+    vy: 0.9,
   });
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -31,16 +34,19 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
 
     const updatePhysics = () => {
       const box = boxRef.current;
-      const boxWidth = box ? box.offsetWidth : 400;
-      const boxHeight = box ? box.offsetHeight : 200;
+      const boxWidth = box ? box.offsetWidth : 380;
+      const boxHeight = box ? box.offsetHeight : 180;
 
-      const maxX = window.innerWidth - boxWidth - 10;
-      const maxY = window.innerHeight - boxHeight - 10;
+      const maxX = Math.max(10, window.innerWidth - boxWidth - 15);
+      const maxY = Math.max(10, window.innerHeight - boxHeight - 15);
 
       let { x, y, vx, vy } = posRef.current;
 
-      x += vx;
-      y += vy;
+      // Slow down to 25% speed when hovered so user can easily aim and press it!
+      const currentSpeedFactor = isHovered ? 0.2 : 1.0;
+
+      x += vx * currentSpeedFactor;
+      y += vy * currentSpeedFactor;
 
       let hitWall = false;
 
@@ -76,18 +82,27 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
 
     animId = requestAnimationFrame(updatePhysics);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [isHovered]);
+
+  const handleTriggerProceed = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    playClick();
+    onProceed();
+  };
 
   return (
     <div
       ref={boxRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         position: 'fixed',
         left: `${pos.x}px`,
         top: `${pos.y}px`,
-        zIndex: 50,
+        zIndex: 60,
       }}
-      className={`border-4 rounded-3xl p-5 sm:p-6 text-center max-w-md shadow-2xl transition-colors duration-300 select-none ${COLORS[colorIdx]}`}
+      className={`border-4 rounded-3xl p-5 sm:p-6 text-center max-w-md shadow-2xl transition-colors duration-300 select-none cursor-pointer ${COLORS[colorIdx]}`}
     >
       <div className="inline-flex p-2.5 rounded-full bg-emerald-500/20 text-emerald-400 mb-1.5 animate-pulse">
         <CheckCircle2 className="w-7 h-7" />
@@ -98,15 +113,14 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
       </h3>
 
       <p className="text-[11px] sm:text-xs text-emerald-200 mt-1 mb-3">
-        Catch this DVD bouncing box to advance to final arbitration!
+        {isHovered ? "🎯 Target locked! Click now!" : "Hover or click this DVD box to advance!"}
       </p>
 
       <button
-        onClick={() => {
-          playClick();
-          onProceed();
-        }}
-        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black py-3 px-6 rounded-xl shadow-lg shadow-emerald-500/40 text-sm flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95"
+        type="button"
+        onPointerDown={handleTriggerProceed}
+        onClick={handleTriggerProceed}
+        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 active:from-emerald-600 active:to-teal-600 text-white font-black py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-500/40 text-sm flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95"
       >
         <span>Proceed to Final Bureaucratic Exit</span>
         <ArrowRight className="w-4 h-4" />
