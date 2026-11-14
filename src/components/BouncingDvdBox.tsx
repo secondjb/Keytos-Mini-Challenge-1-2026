@@ -18,14 +18,13 @@ const COLORS = [
 export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => {
   const [pos, setPos] = useState<{ x: number; y: number }>({ x: 60, y: 120 });
   const [colorIdx, setColorIdx] = useState<number>(0);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
   
-  // Slower, smoother velocity
+  // Tuned velocity (20% faster, constant speed)
   const posRef = useRef<{ x: number; y: number; vx: number; vy: number }>({
     x: 60,
     y: 120,
-    vx: 1.2,
-    vy: 0.9,
+    vx: 1.45,
+    vy: 1.1,
   });
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -42,11 +41,9 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
 
       let { x, y, vx, vy } = posRef.current;
 
-      // Slow down to 25% speed when hovered so user can easily aim and press it!
-      const currentSpeedFactor = isHovered ? 0.2 : 1.0;
-
-      x += vx * currentSpeedFactor;
-      y += vy * currentSpeedFactor;
+      // Constant velocity without slowdown on hover
+      x += vx;
+      y += vy;
 
       let hitWall = false;
 
@@ -94,8 +91,6 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
   return (
     <div
       ref={boxRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{
         position: 'fixed',
         left: `${pos.x}px`,
@@ -113,7 +108,7 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
       </h3>
 
       <p className="text-[11px] sm:text-xs text-emerald-200 mt-1 mb-3">
-        {isHovered ? "🎯 Target locked! Click now!" : "Hover or click this DVD box to advance!"}
+        Catch this bouncing DVD box to advance!
       </p>
 
       <button

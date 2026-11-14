@@ -37,10 +37,10 @@ export const RoamingAnimalBanner: React.FC<RoamingAnimalBannerProps> = ({ onBrib
         // Ignore
       }
 
-      // Animate walking across screen
+      // Animate walking across screen (50% slower for easy reading)
       let currentPos = -30;
       const walkTimer = setInterval(() => {
-        currentPos += 1.8;
+        currentPos += 0.85;
         setPositionX(currentPos);
         if (currentPos > 120) {
           clearInterval(walkTimer);

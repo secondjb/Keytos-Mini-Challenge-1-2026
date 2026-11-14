@@ -8,6 +8,7 @@ import { Stage3Guilt } from './components/Stage3Guilt';
 import { Stage4Akinator } from './components/Stage4Akinator';
 import { Stage5Final } from './components/Stage5Final';
 import { DanmakuComments } from './components/DanmakuComments';
+import { LeftSidebarAds, RightSidebarAds } from './components/SidebarSkyscraperAds';
 
 const CHAOTIC_FONTS = [
   "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive",
@@ -24,6 +25,7 @@ export const App: React.FC = () => {
   const [currentStage, setCurrentStage] = useState<Stage>('DASHBOARD');
   const [currentFont, setCurrentFont] = useState<string>(CHAOTIC_FONTS[0]);
   const [fontNotification, setFontNotification] = useState<string | null>(null);
+  const [adToast, setAdToast] = useState<string | null>(null);
 
   const [stats, setStats] = useState<UserStats>({
     planName: 'CloudPulse Titan Suite',
@@ -117,63 +119,78 @@ export const App: React.FC = () => {
     >
       {/* Bilibili-style Danmaku Bullet Comments (pointer-events-none) */}
       <DanmakuComments />
-      {/* Dynamic Font Shift Notification */}
-      {fontNotification && (
-        <div className="fixed top-12 left-1/2 -translate-x-1/2 z-50 bg-purple-950/90 border-2 border-purple-400 text-purple-200 text-xs px-4 py-1.5 rounded-full shadow-2xl font-mono animate-bounce">
-          {fontNotification}
-        </div>
-      )}
 
       {/* Top Header */}
       <Header stats={stats} />
 
-      {/* Main Content Area */}
-      <main className="flex-1 py-8 px-4 flex flex-col items-center justify-start">
-        <BossBar 
-          stage={currentStage} 
-          hpPercent={getBossHP()} 
-          strikes={stats.strikes} 
+      {/* Main 3-Column Layout: Left Ads fill all empty left space, Center Stage, Right Ads fill all empty right space */}
+      <div className="flex-1 w-full flex items-start justify-center gap-2 sm:gap-4 px-2">
+        {/* Left Ad Column taking up all empty left space */}
+        <LeftSidebarAds 
+          onAdClicked={(msg) => {
+            setAdToast(msg);
+            setStats(prev => ({ ...prev, pulseCoins: prev.pulseCoins + 500 }));
+            setTimeout(() => setAdToast(null), 3500);
+          }}
         />
 
-        {currentStage === 'DASHBOARD' && (
-          <Stage1Dashboard
-            stats={stats}
-            onProceedToCancel={() => setCurrentStage('CARIBBEAN_BRIBE')}
-            onAccidentalUpgrade={handleAccidentalUpgrade}
+        {/* Center Main Content Area */}
+        <main className="w-full max-w-4xl shrink-0 py-8 px-2 sm:px-4 flex flex-col items-center justify-start min-w-0">
+          <BossBar 
+            stage={currentStage} 
+            hpPercent={getBossHP()} 
+            strikes={stats.strikes} 
           />
-        )}
 
-        {currentStage === 'CARIBBEAN_BRIBE' && (
-          <Stage2Bribe
-            onKeepSubscription={handleStay}
-            onProceedToGuilt={() => setCurrentStage('GUILT_TRIP')}
-          />
-        )}
+          {currentStage === 'DASHBOARD' && (
+            <Stage1Dashboard
+              stats={stats}
+              onProceedToCancel={() => setCurrentStage('CARIBBEAN_BRIBE')}
+              onAccidentalUpgrade={handleAccidentalUpgrade}
+            />
+          )}
 
-        {currentStage === 'GUILT_TRIP' && (
-          <Stage3Guilt
-            stats={stats}
-            onStay={handleStay}
-            onProceedToAkinator={() => setCurrentStage('REVERSE_AKINATOR')}
-          />
-        )}
+          {currentStage === 'CARIBBEAN_BRIBE' && (
+            <Stage2Bribe
+              onKeepSubscription={handleStay}
+              onProceedToGuilt={() => setCurrentStage('GUILT_TRIP')}
+            />
+          )}
 
-        {currentStage === 'REVERSE_AKINATOR' && (
-          <Stage4Akinator
-            onVictory={() => setCurrentStage('FINAL_TRAP')}
-            onStay={handleStay}
-            onStrikeIssued={handleStrikeIssued}
-            onRestartToBeginning={handleFullReset}
-            strikes={stats.strikes}
-          />
-        )}
+          {currentStage === 'GUILT_TRIP' && (
+            <Stage3Guilt
+              stats={stats}
+              onStay={handleStay}
+              onProceedToAkinator={() => setCurrentStage('REVERSE_AKINATOR')}
+            />
+          )}
 
-        {currentStage === 'FINAL_TRAP' && (
-          <Stage5Final
-            onRestartToBeginning={handleFullReset}
-          />
-        )}
-      </main>
+          {currentStage === 'REVERSE_AKINATOR' && (
+            <Stage4Akinator
+              onVictory={() => setCurrentStage('FINAL_TRAP')}
+              onStay={handleStay}
+              onStrikeIssued={handleStrikeIssued}
+              onRestartToBeginning={handleFullReset}
+              strikes={stats.strikes}
+            />
+          )}
+
+          {currentStage === 'FINAL_TRAP' && (
+            <Stage5Final
+              onRestartToBeginning={handleFullReset}
+            />
+          )}
+        </main>
+
+        {/* Right Ad Column taking up all empty right space */}
+        <RightSidebarAds 
+          onAdClicked={(msg) => {
+            setAdToast(msg);
+            setStats(prev => ({ ...prev, pulseCoins: prev.pulseCoins + 500 }));
+            setTimeout(() => setAdToast(null), 3500);
+          }}
+        />
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-900/60 py-6 text-center text-xs text-slate-500">

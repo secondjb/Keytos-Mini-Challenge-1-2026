@@ -10,12 +10,11 @@ interface Stage5FinalProps {
 export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }) => {
   const [hasWonFinal, setHasWonFinal] = useState<boolean>(false);
   const [bouncingPos, setBouncingPos] = useState<{ x: number; y: number }>({ x: 30, y: 80 });
-  const [isBtnHovered, setIsBtnHovered] = useState<boolean>(false);
   const posRef = useRef<{ x: number; y: number; vx: number; vy: number }>({
     x: 30,
     y: 80,
-    vx: 1.2,
-    vy: 0.9
+    vx: 1.45,
+    vy: 1.1
   });
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -32,9 +31,8 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
       const maxY = Math.max(10, window.innerHeight - height - 20);
 
       let { x, y, vx, vy } = posRef.current;
-      const speedFactor = isBtnHovered ? 0.2 : 1.0;
-      x += vx * speedFactor;
-      y += vy * speedFactor;
+      x += vx;
+      y += vy;
 
       if (x <= 10) {
         x = 10;
@@ -59,7 +57,7 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
 
     animId = requestAnimationFrame(animateDvd);
     return () => cancelAnimationFrame(animId);
-  }, [isBtnHovered]);
+  }, []);
 
   const handleMistakeAndRestore = () => {
     playFanfare();
@@ -89,8 +87,6 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
       {!hasWonFinal && (
         <div
           ref={buttonRef}
-          onMouseEnter={() => setIsBtnHovered(true)}
-          onMouseLeave={() => setIsBtnHovered(false)}
           style={{
             position: 'fixed',
             left: `${bouncingPos.x}px`,
@@ -105,7 +101,7 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
             onClick={handleTrueVictoryClick}
             className="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 hover:from-rose-500 hover:to-pink-500 active:from-rose-700 active:to-pink-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-2xl border-2 border-white text-xs sm:text-sm flex items-center gap-2 cursor-pointer transition-transform active:scale-95 animate-pulse"
           >
-            <span>🎯 {isBtnHovered ? "CLICK NOW TO ESCAPE!" : "CATCH ME: PERMANENTLY FINALIZE CANCELLATION"}</span>
+            <span>🎯 CATCH ME: PERMANENTLY FINALIZE CANCELLATION</span>
           </button>
         </div>
       )}
