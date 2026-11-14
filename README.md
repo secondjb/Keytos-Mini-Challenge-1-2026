@@ -1,25 +1,25 @@
-# CloudPulse — "Worst Cancel Screen Ever" ⚡
+# CloudPulse — "Worst Cancel Screen Ever"
 > **Keytos Hack — Mini-Challenge #1 Submission**  
 > *"Hostile, confusing, and delightfully unhinged — but 100% possible to cancel."*
 
 ---
 
-## 💡 Executive Summary
+## Executive Summary
 
 **CloudPulse** is a satirical, interactive web experience that satirizes the predatory dark patterns found across modern SaaS, telecom, and subscription services, turning them into an entertaining, playable obstacle course.
 
 Rather than just presenting passive hostile text, the entire application is architected around an escalating **5-stage boss gauntlet** featuring a gauntlet of interactive mini-games and a centerpiece **Reverse Akinator AI loop**:
 
-1. **🏃 The Evasive Cursor Mini-Game (Stage 2):** The true cancellation link physically flees across the viewport when the user's cursor approaches, forcing precision and persistence.
-2. **🧩 The Interlocking Double-Negative Puzzle (Stage 3):** An adversarial legal matrix requiring users to reconcile inverted checkboxes (`Clause 1A` and `Clause 1B`) before unlocking progression.
-3. **🔮 The Reverse Akinator Boss Battle (Stage 4 - Main Loop):** Instead of an AI guessing what character you are thinking of, you must play against the *Retention Oracle*. You must provide subtle, indirect conversational clues until the AI deduces your intent is to cancel.
-4. **🚔 The Police Sobriety Checkpoint (Mid-Stage 4):** A mandatory field-sobriety mini-game requiring the user to steer a police cruiser through an ultra-narrow corridor without touching the barrier before being allowed to submit further clues.
-5. **📀 The Bouncing DVD Logo Timing Mini-Game (Stages 4 & 5):** The exit triggers bounce off the screen boundaries at constant velocity like a retro DVD screensaver logo, requiring hand-eye coordination to click.
-6. **🔄 The Circular Reset Trap (Stage 5):** A celebratory decoy button that shoots confetti and loops the user right back to Stage 1!
+1. **The Evasive Cursor Mini-Game (Stage 2):** The true cancellation link physically flees across the viewport when the user's cursor approaches, forcing precision and persistence.
+2. **The Interlocking Double-Negative Puzzle (Stage 3):** An adversarial legal matrix requiring users to reconcile inverted checkboxes (`Clause 1A` and `Clause 1B`) before unlocking progression.
+3. **The Reverse Akinator Boss Battle (Stage 4 - Main Loop):** Instead of an AI guessing what character you are thinking of, you must play against the *Retention Oracle*. You must provide subtle, indirect conversational clues until the AI deduces your intent is to cancel.
+4. **The Police Sobriety Checkpoint (Mid-Stage 4):** A mandatory field-sobriety mini-game requiring the user to steer a police cruiser through an ultra-narrow corridor without touching the barrier before being allowed to submit further clues.
+5. **The Bouncing DVD Logo Timing Mini-Game (Stages 4 & 5):** The exit triggers bounce off the screen boundaries at constant velocity like a retro DVD screensaver logo, requiring hand-eye coordination to click.
+6. **The Circular Reset Trap (Stage 5):** A celebratory decoy button that shoots confetti and loops the user right back to Stage 1!
 
 ---
 
-## 🧠 The Deterministic Semantic Heuristic Engine (Replacing External AI)
+## The Deterministic Semantic Heuristic Engine (Replacing External AI)
 
 To ensure **100% reliability, zero network latency, zero API costs, and a deterministic, guaranteed-solvable path** for judges, we replaced external LLM API calls with a custom **Client-Side Semantic Heuristic Intent Engine** (`src/utils/akinatorEngine.ts`):
 
@@ -31,7 +31,7 @@ To ensure **100% reliability, zero network latency, zero API costs, and a determ
 
 ---
 
-## 🏆 Submission Overview
+## Submission Overview
 - **Event:** Keytos Hackathon Mini-Challenge 01
 - **Theme:** Worst Cancel Screen Ever
 - **GitHub Repository:** [https://github.com/secondjb/Keytos-Mini-Challenge-1-2026](https://github.com/secondjb/Keytos-Mini-Challenge-1-2026)
@@ -40,9 +40,9 @@ To ensure **100% reliability, zero network latency, zero API costs, and a determ
 
 ---
 
-## 🎬 Submission Videos (1080p, 60 FPS, Sub-5 Minutes)
+## Submission Videos (1080p, 60 FPS, Sub-5 Minutes)
 
-> 📁 **Watch / Download All Videos on Google Drive:**  
+> **Watch / Download All Videos on Google Drive:**  
 > **[Google Drive Video Folder (All 3 Videos)](https://drive.google.com/drive/folders/1T9ez2y0TaUL8KWD2rWE1bKQZlJdYVx-5?usp=sharing)**
 
 All videos are also committed directly inside the repository under [`docs/videos/`](./docs/videos/):
@@ -55,7 +55,7 @@ All videos are also committed directly inside the repository under [`docs/videos
 
 ---
 
-## 🎭 The 5-Stage Gauntlet & Hostile Mechanics
+## The 5-Stage Gauntlet & Hostile Mechanics
 
 ### 1. Stage 1: Fictional SaaS Dashboard (CloudPulse Titan Suite)
 - **Active Tier:** Fictional *CloudPulse Titan Suite* ($89.99/mo).
@@ -84,7 +84,7 @@ All videos are also committed directly inside the repository under [`docs/videos
   - **Strike 4:** Executes an instant hard session reset back to Stage 1!
 - **Mandatory Police Sobriety Field Checkpoint:** Triggered midway through the boss fight; the user must drag a police cruiser through an ultra-narrow corridor to the checkered flag before they are permitted to proceed.
 - **Dramatic Crystal Shatter:** On Round 5 with valid semantic clues, the crystal ball shatters with audio fanfare:
-  > *"💥 THE SACRED CRYSTAL SHATTERS! Ceasing payment? Severing access? Walking away from CloudPulse?! ARE YOU TRYING TO CANCEL YOUR SACRED SUBSCRIPTION?! NOOOOO!"*
+  > *"THE SACRED CRYSTAL SHATTERS! Ceasing payment? Severing access? Walking away from CloudPulse?! ARE YOU TRYING TO CANCEL YOUR SACRED SUBSCRIPTION?! NOOOOO!"*
 - **Bouncing DVD Logo Target:** Defeating the Oracle spawns a bouncing DVD screensaver box that ricochets across the screen at constant velocity, requiring precision timing to click.
 
 ### 5. Stage 5: Notice of Non-Declination De-Enrollment & Circular Trap
@@ -98,13 +98,13 @@ All videos are also committed directly inside the repository under [`docs/videos
 
 ---
 
-## 🌟 Ambient Hostility Systems
+## Ambient Hostility Systems
 
 1. **Full-Gutter Responsive Skyscraper Ads (`SidebarSkyscraperAds.tsx`):**
    - Left and right gutters dynamically expand to occupy 100% of unused viewport space.
    - Parody ads include: *"Doctors HATE This One Weird Retention Trick!"*, *"3 Hot Single Discounts Near You Want To Renew!"*, *"Download 128GB of Virtual RAM For Free!"*, and *"Why Eat Real Pizza? Own a Pizza JPG!"*.
 2. **Bilibili-Style Danmaku Bullet Comments (`DanmakuComments.tsx`):**
-   - 16 moving lanes of user comments flying across the screen with real-time peer pressure ("Auto-renewal is self-care 🙏", "Subscribed since 2019, zero regrets!", "Bro don't do it, the reverse akinator broke my friend's soul").
+   - 16 moving lanes of user comments flying across the screen with real-time peer pressure ("Auto-renewal is self-care", "Subscribed since 2019, zero regrets!", "Bro don't do it, the reverse akinator broke my friend's soul").
    - Implemented with `pointer-events-none` so visual chaos never breaks click targets.
 3. **Roaming Mascot Guilt Banners with Web Speech Synthesis (`RoamingAnimalBanner.tsx`):**
    - Corporate animal mascots (*Charles the Penguin*, *Barnaby the Hamster*) slowly march across the screen every 15 seconds, complete with real browser audio voice synthesis pleading for retention.
@@ -115,12 +115,12 @@ All videos are also committed directly inside the repository under [`docs/videos
 
 ---
 
-## ⚡ Judge / Developer Shortcuts
+## Judge / Developer Shortcuts
 - **Instant Stage Navigation:** Need to jump directly between stages during evaluation? Press `Ctrl + Shift + \` or look for the discreet developer indicator in the footer to fast-forward through the gauntlet.
 
 ---
 
-## 🚀 Deployment & Local Setup
+## Deployment & Local Setup
 
 ### Vercel Deployment (Instant 1-Click)
 This project is configured with a zero-config [`vercel.json`](./vercel.json) and standard SPA rewrites:
@@ -143,7 +143,7 @@ npm run dev
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework:** React 18, TypeScript, Tailwind CSS
 - **Bundler:** esbuild (instant 200ms sub-second bundling)
 - **Icons:** Lucide React
