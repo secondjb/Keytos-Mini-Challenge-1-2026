@@ -4,6 +4,33 @@
 
 ---
 
+## 💡 Executive Summary
+
+**CloudPulse** is a satirical, interactive web experience that satirizes the predatory dark patterns found across modern SaaS, telecom, and subscription services, turning them into an entertaining, playable obstacle course.
+
+Rather than just presenting passive hostile text, the entire application is architected around an escalating **5-stage boss gauntlet** featuring a gauntlet of interactive mini-games and a centerpiece **Reverse Akinator AI loop**:
+
+1. **🏃 The Evasive Cursor Mini-Game (Stage 2):** The true cancellation link physically flees across the viewport when the user's cursor approaches, forcing precision and persistence.
+2. **🧩 The Interlocking Double-Negative Puzzle (Stage 3):** An adversarial legal matrix requiring users to reconcile inverted checkboxes (`Clause 1A` and `Clause 1B`) before unlocking progression.
+3. **🔮 The Reverse Akinator Boss Battle (Stage 4 - Main Loop):** Instead of an AI guessing what character you are thinking of, you must play against the *Retention Oracle*. You must provide subtle, indirect conversational clues until the AI deduces your intent is to cancel.
+4. **🚔 The Police Sobriety Checkpoint (Mid-Stage 4):** A mandatory field-sobriety mini-game requiring the user to steer a police cruiser through an ultra-narrow corridor without touching the barrier before being allowed to submit further clues.
+5. **📀 The Bouncing DVD Logo Timing Mini-Game (Stages 4 & 5):** The exit triggers bounce off the screen boundaries at constant velocity like a retro DVD screensaver logo, requiring hand-eye coordination to click.
+6. **🔄 The Circular Reset Trap (Stage 5):** A celebratory decoy button that shoots confetti and loops the user right back to Stage 1!
+
+---
+
+## 🧠 The Deterministic Semantic Heuristic Engine (Replacing External AI)
+
+To ensure **100% reliability, zero network latency, zero API costs, and a deterministic, guaranteed-solvable path** for judges, we replaced external LLM API calls with a custom **Client-Side Semantic Heuristic Intent Engine** (`src/utils/akinatorEngine.ts`):
+
+- **Keyword Cluster Mapping:** The engine analyzes user input across multiple semantic categories (financial cessation, account closure, parting phrases, dissatisfaction, competitor migration).
+- **Adversarial Deflection System:** For the first 4 rounds, the engine intentionally misinterprets intent into absurd upsells (e.g., offering Caribbean diamond cruises, proposing barter payments with canned tuna, or diagnosing user burnout).
+- **Forbidden Tokenizer & Strike Machine:** A strict regex-based violation detector monitors banned vocabulary (`cancel`, `quit`, `unsub`, `leave`, `stop`, `end`, `terminate`). Submitting forbidden terms triggers real-time audio buzzers, viewport shakes, strike increments, a flashing red emergency alert at Strike 3, and a hard session reset at Strike 4.
+- **Dramatic Revelation Threshold:** Once the user inputs sufficient semantic clues across 5+ rounds, the engine triggers the dramatic crystal shatter sequence.
+- **Offline & Standalone:** Runs entirely inside the browser with zero third-party dependencies, guaranteeing an instant 60 FPS response rate.
+
+---
+
 ## 🏆 Submission Overview
 - **Event:** Keytos Hackathon Mini-Challenge 01
 - **Theme:** Worst Cancel Screen Ever
