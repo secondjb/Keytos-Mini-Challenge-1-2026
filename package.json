@@ -6,7 +6,7 @@
   "scripts": {
     "build:css": "tailwindcss -i ./src/index.css -o ./dist/tailwind.css --minify",
     "build:js": "esbuild src/main.tsx --bundle --outfile=dist/bundle.js --loader:.ts=ts --loader:.tsx=tsx --minify --define:process.env.NODE_ENV=\\\"production\\\"",
-    "build": "npm run build:css && npm run build:js",
+    "build": "node scripts/build.js",
     "dev": "npm run build && npx serve dist -l 5173",
     "start": "npx serve dist -l 5173"
   },
