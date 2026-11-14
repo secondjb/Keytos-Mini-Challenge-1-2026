@@ -112,12 +112,12 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
 
       {/* Main Notice Box */}
       <div className="bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center">
-        <div className="inline-flex p-3 rounded-2xl bg-slate-800 border border-slate-700 text-amber-400 mb-4 shadow-inner">
-          <FileText className="w-10 h-10" />
-        </div>
-
-        <div className="inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-300 font-mono text-xs uppercase tracking-wider mb-4 border border-slate-700">
-          FORM 1099-UNSUBSCRIBE-REV-4
+        {/* Clean vertically-centered icon and form identifier without bulky outlines */}
+        <div className="flex items-center justify-center gap-2.5 mb-4">
+          <FileText className="w-6 h-6 text-amber-400 shrink-0" />
+          <span className="text-slate-300 font-mono text-xs uppercase tracking-wider font-semibold">
+            FORM 1099-UNSUBSCRIBE-REV-4
+          </span>
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
