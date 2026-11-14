@@ -1,0 +1,33 @@
+{
+  "name": "worst-cancel-screen-ever",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/index.css -o ./dist/tailwind.css --minify",
+    "build:js": "esbuild src/main.tsx --bundle --outfile=dist/bundle.js --loader:.ts=ts --loader:.tsx=tsx --minify --define:process.env.NODE_ENV=\\\"production\\\"",
+    "build": "npm run build:css && npm run build:js",
+    "dev": "npm run build && npx serve dist -l 5173",
+    "start": "npx serve dist -l 5173"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^1.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.25.0",
+    "postcss": "^8.4.49",
+    "serve": "^14.2.4",
+    "tailwindcss": "^3.4.16",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1"
+  }
+}
