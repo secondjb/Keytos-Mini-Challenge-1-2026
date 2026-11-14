@@ -7,6 +7,7 @@ import { Stage2Bribe } from './components/Stage2Bribe';
 import { Stage3Guilt } from './components/Stage3Guilt';
 import { Stage4Akinator } from './components/Stage4Akinator';
 import { Stage5Final } from './components/Stage5Final';
+import { DanmakuComments } from './components/DanmakuComments';
 
 const CHAOTIC_FONTS = [
   "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive",
@@ -114,6 +115,8 @@ export const App: React.FC = () => {
         stats.strikes === 3 ? 'bg-red-950/40 ring-8 ring-inset ring-red-600 animate-pulse' : ''
       }`}
     >
+      {/* Bilibili-style Danmaku Bullet Comments (pointer-events-none) */}
+      <DanmakuComments />
       {/* Dynamic Font Shift Notification */}
       {fontNotification && (
         <div className="fixed top-12 left-1/2 -translate-x-1/2 z-50 bg-purple-950/90 border-2 border-purple-400 text-purple-200 text-xs px-4 py-1.5 rounded-full shadow-2xl font-mono animate-bounce">
