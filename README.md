@@ -63,3 +63,11 @@ npm start
 # http://localhost:5173
 ```
 *Configured with `vercel.json` for 1-click Vercel deployment with SPA rewrites.*
+
+---
+
+## Development & Authorship
+
+- **Concept & Architecture:** The overall concept, game mechanics, user flow design, and tech stack choices originated from the human author (@secondjb).
+- **Implementation:** Code generation, component architecture, and refactoring were primarily implemented using AI agents.
+- **Automated QA & Video Recording:** AI agents were also utilized to double-check the flow, conduct autonomous end-to-end QA click-through validation across every stage, and record and compile the final 1080p submission videos.
