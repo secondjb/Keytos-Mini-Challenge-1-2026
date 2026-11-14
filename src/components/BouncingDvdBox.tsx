@@ -79,7 +79,7 @@ export const BouncingDvdBox: React.FC<BouncingDvdBoxProps> = ({ onProceed }) => 
 
     animId = requestAnimationFrame(updatePhysics);
     return () => cancelAnimationFrame(animId);
-  }, [isHovered]);
+  }, []);
 
   const handleTriggerProceed = (e: React.SyntheticEvent) => {
     e.preventDefault();

@@ -8,6 +8,19 @@
 - **Event:** Keytos Hackathon Mini-Challenge 01
 - **Theme:** Worst Cancel Screen Ever
 - **Live Demo Port:** `http://localhost:5173/`
+- **GitHub Repository:** `https://github.com/secondjb/Keytos-Mini-Challenge-1-2026`
+
+---
+
+## 🎬 Submission Videos (1080p, 60 FPS, Sub-5 Minutes)
+
+All videos are located in the repository under [`docs/videos/`](./docs/videos/):
+
+| Video | Title & Description | Resolution & Format | File Link |
+| :--- | :--- | :--- | :--- |
+| **Video #1** | **The Solvable Speedrun**<br>Demonstrates the full end-to-end deterministic exit path from Stage 1 through the Reverse Akinator and final freedom certificate with visible cursor interaction. | 1080p (1920x1080), 60 FPS, BT.709 H.264 | [video_1_speedrun_1080p.mp4](./docs/videos/video_1_speedrun_1080p.mp4) |
+| **Video #2** | **Feature Deep Dive & Hostility Showcase**<br>Demonstrates all anti-patterns: sidebar skyscraper ads, Bilibili danmaku comments, early renew trap, double-negative clauses, forbidden word strikes (1, 2, 3 blinking red alarm, 4th reset), sobriety checkpoint swerve, and circular restart trap. | 1080p (1920x1080), 60 FPS, BT.709 H.264 | [video_2_feature_showcase_1080p.mp4](./docs/videos/video_2_feature_showcase_1080p.mp4) |
+| **Video #3** | **Official Combined Submission**<br>Combines both parts seamlessly with 3-second title cards under 5 minutes continuous runtime (~1m 39s) for judge review. | 1080p (1920x1080), 60 FPS, BT.709 H.264 | [video_3_combined_submission_1080p.mp4](./docs/videos/video_3_combined_submission_1080p.mp4) |
 
 ---
 
