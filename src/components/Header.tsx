@@ -52,15 +52,15 @@ export const Header: React.FC<HeaderProps> = ({ stats }) => {
         </div>
 
         {/* Live Perks / Coins Counter */}
-        <div className="hidden sm:flex items-center gap-4">
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-lg px-3 py-1 flex items-center gap-2 text-xs">
-            <Gift className="w-4 h-4 text-amber-400" />
+        <div className="hidden sm:flex items-center gap-4 shrink-0">
+          <div className="bg-slate-800/80 border border-slate-700/60 rounded-lg px-3 py-1 flex items-center gap-2 text-xs whitespace-nowrap shrink-0">
+            <Gift className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="text-slate-400">Karma Points:</span>
             <span className="font-mono font-bold text-amber-300">{stats.pulseCoins.toLocaleString()}</span>
           </div>
 
-          <div className="bg-cyan-950/40 border border-cyan-800/50 rounded-lg px-3 py-1 flex items-center gap-2 text-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <div className="bg-cyan-950/40 border border-cyan-800/50 rounded-lg px-3 py-1 flex items-center gap-2 text-xs whitespace-nowrap shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
             <span className="text-cyan-300 font-medium">Titan Tier ($89.99/mo)</span>
           </div>
         </div>

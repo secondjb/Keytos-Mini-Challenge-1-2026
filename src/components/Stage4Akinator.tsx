@@ -175,39 +175,39 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
       }`}>
         {/* Arena Header (Rounds count removed as requested!) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
               <Bot className="w-7 h-7 text-white animate-pulse" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl sm:text-2xl font-black text-white">The Retention Oracle</h2>
-                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-bold uppercase">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-xl sm:text-2xl font-black text-white whitespace-nowrap">The Retention Oracle</h2>
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-bold uppercase whitespace-nowrap shrink-0">
                   Reverse Akinator
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 mt-0.5 leading-snug">
                 Ask questions or give clues until the AI figures out what you want.
               </p>
             </div>
           </div>
 
           {/* Mysterious Status (NO round count indication!) */}
-          <div className="flex items-center gap-3">
-            <div className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Oracle State</div>
-              <div className="text-xs font-mono font-bold text-indigo-400 animate-pulse">
+          <div className="flex items-center gap-3 shrink-0 self-start sm:self-center">
+            <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 sm:px-4 py-2 text-center whitespace-nowrap min-w-[130px] sm:min-w-[150px]">
+              <div className="text-[10px] text-slate-400 font-bold uppercase whitespace-nowrap">Oracle State</div>
+              <div className="text-xs font-mono font-bold text-indigo-400 animate-pulse whitespace-nowrap">
                 🔮 Evaluating Aura...
               </div>
             </div>
 
-            <div className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Strikes</div>
-              <div className={`text-sm font-mono font-black flex items-center justify-center gap-1 ${
+            <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 sm:px-4 py-2 text-center whitespace-nowrap min-w-[85px] sm:min-w-[100px]">
+              <div className="text-[10px] text-slate-400 font-bold uppercase whitespace-nowrap">Strikes</div>
+              <div className={`text-sm font-mono font-black flex items-center justify-center gap-1.5 whitespace-nowrap ${
                 strikes >= 3 ? 'text-red-400 animate-ping' : strikes > 0 ? 'text-amber-400' : 'text-slate-400'
               }`}>
-                <Flame className="w-3.5 h-3.5" />
-                {strikes} / 4
+                <Flame className="w-3.5 h-3.5 shrink-0" />
+                <span className="whitespace-nowrap">{strikes} / 4</span>
               </div>
             </div>
           </div>
