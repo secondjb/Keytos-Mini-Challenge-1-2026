@@ -1,6 +1,7 @@
 # CloudPulse — "Worst Cancel Screen Ever"
 > **Keytos Hack Mini-Challenge #1**  
-> *"Hostile, confusing, and delightfully unhinged — but 100% possible to cancel."*
+> *"Hostile, confusing, and delightfully unhinged — but 100% possible to cancel."*  
+> **Live Demo:** [https://keytos-mini-challenge-1-2026.vercel.app/](https://keytos-mini-challenge-1-2026.vercel.app/)
 
 ---
 
@@ -38,8 +39,9 @@ To guarantee zero latency, zero API costs, and a deterministic, 100% solvable pa
 
 ---
 
-## Submission Videos & Links
+## Submission Links & Videos
 
+- **Live Application Demo (Vercel):** [https://keytos-mini-challenge-1-2026.vercel.app/](https://keytos-mini-challenge-1-2026.vercel.app/)
 - **GitHub Repository:** [Keytos-Mini-Challenge-1-2026](https://github.com/secondjb/Keytos-Mini-Challenge-1-2026)
 - **Google Drive (All Recordings):** [Google Drive Video Folder](https://drive.google.com/drive/folders/1T9ez2y0TaUL8KWD2rWE1bKQZlJdYVx-5?usp=sharing)
 - **Judge Bypass Shortcut:** Press `Ctrl + Shift + \` to fast-forward stages during evaluation.
