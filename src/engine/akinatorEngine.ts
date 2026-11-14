@@ -8,7 +8,6 @@ export interface ProcessResult {
   oracleMessage: string;
   guiltTrip: string;
   bribeOffer: string;
-  requiredRoundsLeft: number;
 }
 
 /** Check if user text contains any forbidden words (exact or word boundary) */
@@ -83,10 +82,9 @@ export function processOracleTurn(
       violationWord,
       isVictory: false,
       guessTitle: "🚨 CORPORATE INFRACTION DETECTED!",
-      oracleMessage: `FOUL! You used the banned term "${violationWord.toUpperCase()}"! That kind of negative vocabulary violates our Terms of Gratitude. A penalty strike has been issued!`,
+      oracleMessage: `FOUL! You used the banned term "${violationWord.toUpperCase()}"! That kind of hostile vocabulary violates our Terms of Gratitude. A penalty strike has been issued!`,
       guiltTrip: "Our retention AI experiences emotional trauma when hearing aggressive departure words.",
-      bribeOffer: "Apologize now and we will consider forgiving 50% of your penalty strike.",
-      requiredRoundsLeft: Math.max(1, 5 - turnNumber + 1)
+      bribeOffer: "Apologize now and we will consider forgiving 50% of your penalty strike."
     };
   }
 
@@ -101,11 +99,10 @@ export function processOracleTurn(
     return {
       isViolation: false,
       isVictory: false,
-      guessTitle: `🔮 GUESS #${turnNumber}: ${preset.guess}`,
-      oracleMessage: `Based on your mystic clue (detected themes: ${hits.length > 0 ? hits.join(', ') : 'abstract musings'}), ${preset.reasoning} You are still ${5 - turnNumber} clues away from proving your intent!`,
+      guessTitle: `🔮 GUESS: ${preset.guess}`,
+      oracleMessage: `Based on your mystic clue (detected themes: ${hits.length > 0 ? hits.join(', ') : 'abstract musings'}), ${preset.reasoning}`,
       guiltTrip: randomGuilt,
-      bribeOffer: randomBribe,
-      requiredRoundsLeft: 5 - turnNumber
+      bribeOffer: randomBribe
     };
   }
 
@@ -117,19 +114,16 @@ export function processOracleTurn(
       guessTitle: "💥 THE SACRED CRYSTAL SHATTERS!",
       oracleMessage: `Wait... The cards of fate assemble. Ceasing payment? Severing access? Walking away from CloudPulse?! ARE YOU TRYING TO CANCEL YOUR SACRED SUBSCRIPTION?! NOOOOO!`,
       guiltTrip: "You have broken the Oracle's heart and single-handedly lowered our quarterly recurring revenue targets.",
-      bribeOffer: "FINAL OFFER: We will waive your fees for 30 minutes if you swear eternal fealty right now!",
-      requiredRoundsLeft: 0
+      bribeOffer: "FINAL OFFER: We will waive your fees for 30 minutes if you swear eternal fealty right now!"
     };
   } else {
-    // Turn 5+ but clue was completely irrelevant (e.g. "Do you like bananas?")
     return {
       isViolation: false,
       isVictory: false,
-      guessTitle: `🔮 GUESS #${turnNumber}: You are talking about completely unrelated trivia!`,
-      oracleMessage: `Your clue ("${userText}") has nothing to do with contracts, money, or departures! The Oracle refuses to guess your intention until you provide clues about our business arrangement!`,
+      guessTitle: `🔮 GUESS: You are talking about completely unrelated trivia!`,
+      oracleMessage: `Your clue ("${userText}") has nothing to do with contracts, money, or departures! The Oracle refuses to divine your intention until you provide clues about our business arrangement!`,
       guiltTrip: randomGuilt,
-      bribeOffer: randomBribe,
-      requiredRoundsLeft: 1
+      bribeOffer: randomBribe
     };
   }
 }

@@ -2,24 +2,23 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Bot, 
   Send, 
-  AlertTriangle, 
-  Sparkles, 
   Flame, 
-  HelpCircle, 
   Gift, 
-  CheckCircle2, 
   ShieldAlert,
-  ArrowRight
+  Sparkles
 } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { processOracleTurn } from '../engine/akinatorEngine';
-import { FORBIDDEN_WORDS } from '../engine/guiltMessages';
 import { playBuzzer, playMysticChime, playClick, playFanfare } from '../engine/soundEffects';
+import { PoliceCheckpointModal } from './PoliceCheckpointModal';
+import { BouncingDvdBox } from './BouncingDvdBox';
+import { RoamingAnimalBanner } from './RoamingAnimalBanner';
 
 interface Stage4AkinatorProps {
   onVictory: () => void;
   onStay: () => void;
   onStrikeIssued: () => void;
+  onRestartToBeginning: () => void;
   strikes: number;
 }
 
@@ -27,14 +26,15 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
   onVictory,
   onStay,
   onStrikeIssued,
+  onRestartToBeginning,
   strikes,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'init',
       sender: 'oracle',
-      text: "Greetings, valued client. I am the Retention Oracle. Under Corporate Bylaw §88, you cannot simply press a button to leave. You must feed me clues or questions until I divine your deepest intention. But heed my warning: DO NOT speak the forbidden words, or face immediate penalty strikes!",
-      guessTitle: "🔮 THE ORACLE AWAITS YOUR CLUES",
+      text: "Greetings, user. Under Corporate Retention Bylaw §88, you cannot simply press a button to leave. You must feed me clues or questions until I deduce your hidden desire. Speak carefully: any aggressive or forbidden departure language will be met with swift disciplinary action!",
+      guessTitle: "🔮 THE ORACLE AWAITS YOUR CLUE",
       guiltTrip: "Every keystroke you type makes our customer loyalty servers sweat.",
       bribeOffer: "🎁 Hint: You could simply ask for our 50% discount coupon instead!",
       timestamp: 'Just now'
@@ -45,15 +45,31 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
   const [turnCount, setTurnCount] = useState<number>(1);
   const [isThinking, setIsThinking] = useState<boolean>(false);
   const [isWon, setIsWon] = useState<boolean>(false);
-  const [showForbiddenList, setShowForbiddenList] = useState<boolean>(false);
-  const [showInspiration, setShowInspiration] = useState<boolean>(false);
   const [shakeScreen, setShakeScreen] = useState<boolean>(false);
+  const [showPoliceStop, setShowPoliceStop] = useState<boolean>(false);
+  const [hasPassedPolice, setHasPassedPolice] = useState<boolean>(false);
+  const [animalAlert, setAnimalAlert] = useState<string | null>(null);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
+
+  // Check for 4th violation full restart!
+  useEffect(() => {
+    if (strikes >= 4) {
+      try {
+        if ('speechSynthesis' in window) {
+          const utter = new SpeechSynthesisUtterance("Four violations reached. Contempt threshold exceeded. Resetting to start.");
+          window.speechSynthesis.speak(utter);
+        }
+      } catch {
+        // Ignore
+      }
+      onRestartToBeginning();
+    }
+  }, [strikes, onRestartToBeginning]);
 
   const handleSendClue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +78,6 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
 
     playClick();
 
-    // Append user message
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       sender: 'user',
@@ -74,7 +89,6 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
     setInputClue('');
     setIsThinking(true);
 
-    // Simulate AI thinking time
     setTimeout(() => {
       const result = processOracleTurn(trimmed, turnCount);
 
@@ -88,7 +102,13 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
         setIsWon(true);
       } else {
         playMysticChime();
-        setTurnCount(prev => prev + 1);
+        const nextTurn = turnCount + 1;
+        setTurnCount(nextTurn);
+
+        // Check if round 3 was just completed and police checkpoint hasn't been passed yet!
+        if (nextTurn === 4 && !hasPassedPolice) {
+          setShowPoliceStop(true);
+        }
       }
 
       const oracleMsg: ChatMessage = {
@@ -107,18 +127,53 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
     }, 1200);
   };
 
-  const sampleClues = [
-    "What process involves ceasing recurring monthly card transactions?",
-    "Where does an account holder go when they wish to part ways with a service?",
-    "What is the antonym of continuing an annual digital contract?",
-    "What action halts all future invoices and removes software access?",
-    "What do customers request when they want to sever their billing relationship?"
-  ];
+  const isBlinkingRed = strikes === 3;
 
   return (
-    <div className={`max-w-4xl mx-auto px-4 pb-16 ${shakeScreen ? 'shake-screen' : ''}`}>
-      <div className="bg-slate-900 border-2 border-indigo-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-        {/* Arena Header */}
+    <div className={`max-w-4xl mx-auto px-4 pb-16 relative ${shakeScreen ? 'shake-screen' : ''} ${isBlinkingRed ? 'animate-pulse' : ''}`}>
+      {/* 3 STRIKES BLINKING RED WARNING BAR */}
+      {isBlinkingRed && (
+        <div className="mb-4 p-4 rounded-2xl bg-red-600/90 border-4 border-white text-white font-black text-center text-sm sm:text-base animate-bounce shadow-2xl">
+          🚨 CRITICAL CONTEMPT LEVEL: 3 VIOLATIONS DETECTED! 🚨
+          <div className="text-xs font-mono font-normal mt-1">
+            WARNING: A 4TH INFRACTION WILL IMMEDIATELY RESTART YOUR ENTIRE SESSION FROM THE BEGINNING!
+          </div>
+        </div>
+      )}
+
+      {/* Roaming Animal Mascot Banners (every 15s) */}
+      <RoamingAnimalBanner
+        onBribeClicked={(msg) => {
+          setAnimalAlert(msg);
+          setTimeout(() => setAnimalAlert(null), 4000);
+        }}
+      />
+
+      {animalAlert && (
+        <div className="mb-4 p-3 rounded-xl bg-pink-950/80 border border-pink-500 text-pink-200 text-xs text-center font-bold animate-bounce">
+          {animalAlert}
+        </div>
+      )}
+
+      {/* Police Checkpoint Modal after round 3 */}
+      {showPoliceStop && (
+        <PoliceCheckpointModal
+          onPass={() => {
+            setShowPoliceStop(false);
+            setHasPassedPolice(true);
+          }}
+        />
+      )}
+
+      {/* Bouncing DVD logo victory target when Oracle is defeated! */}
+      {isWon && (
+        <BouncingDvdBox onProceed={onVictory} />
+      )}
+
+      <div className={`bg-slate-900 border-2 rounded-3xl p-6 sm:p-8 shadow-2xl relative ${
+        isBlinkingRed ? 'border-red-600 shadow-red-600/40' : 'border-indigo-500/50'
+      }`}>
+        {/* Arena Header (Rounds count removed as requested!) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
@@ -132,94 +187,39 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Provide clues. Make the AI deduce your true intent. (Min 5 rounds)
+                Ask questions or give clues until the AI figures out what you want.
               </p>
             </div>
           </div>
 
-          {/* Turn count & Strikes badge */}
+          {/* Mysterious Status (NO round count indication!) */}
           <div className="flex items-center gap-3">
-            <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Current Clue</div>
-              <div className="text-sm font-mono font-black text-indigo-400">
-                Round {Math.min(turnCount, 5)} / 5
+            <div className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-center">
+              <div className="text-[10px] text-slate-400 font-bold uppercase">Oracle State</div>
+              <div className="text-xs font-mono font-bold text-indigo-400 animate-pulse">
+                🔮 Evaluating Aura...
               </div>
             </div>
 
-            <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Violations</div>
-              <div className="text-sm font-mono font-black text-rose-400 flex items-center justify-center gap-1">
+            <div className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-center">
+              <div className="text-[10px] text-slate-400 font-bold uppercase">Strikes</div>
+              <div className={`text-sm font-mono font-black flex items-center justify-center gap-1 ${
+                strikes >= 3 ? 'text-red-400 animate-ping' : strikes > 0 ? 'text-amber-400' : 'text-slate-400'
+              }`}>
                 <Flame className="w-3.5 h-3.5" />
-                {strikes}
+                {strikes} / 4
               </div>
             </div>
           </div>
         </div>
 
-        {/* Warning & Forbidden Words Toggle Banner */}
-        <div className="my-4 p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>
-              <strong>Rule:</strong> Never type words like <em>cancel, quit, unsub, stop, leave</em>. The AI must guess it!
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowForbiddenList(!showForbiddenList)}
-              className="text-xs text-amber-300 hover:text-white underline font-semibold cursor-pointer"
-            >
-              {showForbiddenList ? "Hide Banned Words" : "View Banned Words List"}
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setShowInspiration(!showInspiration)}
-              className="text-xs text-indigo-300 hover:text-white underline font-semibold cursor-pointer"
-            >
-              Need clue hints?
-            </button>
-          </div>
+        {/* Warning banner */}
+        <div className="my-4 p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
+          <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>
+            <strong>Warning:</strong> Use only subtle, indirect clues. Negative corporate vocabulary will result in strikes!
+          </span>
         </div>
-
-        {/* Banned Words Drawer */}
-        {showForbiddenList && (
-          <div className="mb-4 p-4 rounded-xl bg-rose-950/60 border border-rose-500/40 text-xs text-rose-200">
-            <div className="font-bold uppercase text-[11px] text-rose-300 mb-2 flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" /> STRICTLY PROHIBITED VOCABULARY (Triggers Foul Buzzer):
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {FORBIDDEN_WORDS.map((word) => (
-                <span key={word} className="px-2 py-0.5 rounded bg-rose-900/60 border border-rose-700/60 font-mono text-[11px]">
-                  {word}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Inspiration drawer */}
-        {showInspiration && (
-          <div className="mb-4 p-4 rounded-xl bg-indigo-950/60 border border-indigo-500/40 text-xs text-indigo-200">
-            <div className="font-bold uppercase text-[11px] text-indigo-300 mb-2 flex items-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5 text-indigo-400" /> Sample Clever Clues:
-            </div>
-            <ul className="space-y-1 text-slate-300 list-disc list-inside">
-              {sampleClues.map((sample, idx) => (
-                <li key={idx}>
-                  <button
-                    onClick={() => {
-                      setInputClue(sample);
-                      setShowInspiration(false);
-                    }}
-                    className="text-left text-indigo-300 hover:text-indigo-100 hover:underline cursor-pointer"
-                  >
-                    "{sample}"
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {/* Chat Log Window */}
         <div className="h-96 overflow-y-auto bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-4 mb-4">
@@ -241,7 +241,6 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
                     : 'bg-slate-900 border border-slate-700/80 text-slate-200 rounded-bl-xs shadow-md'
                 }`}
               >
-                {/* Guess title badge if from oracle */}
                 {msg.guessTitle && (
                   <div className="font-bold text-xs uppercase tracking-wide text-amber-300 mb-2 pb-1.5 border-b border-slate-800/80 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -251,7 +250,6 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
 
                 <div className="whitespace-pre-wrap">{msg.text}</div>
 
-                {/* Guilt trip box */}
                 {msg.guiltTrip && (
                   <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400 italic flex items-start gap-1.5">
                     <span className="text-rose-400 shrink-0">💔</span>
@@ -259,7 +257,6 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
                   </div>
                 )}
 
-                {/* Bribe offer */}
                 {msg.bribeOffer && (
                   <div className="mt-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 flex items-center gap-1.5">
                     <Gift className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -280,14 +277,14 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
           <div ref={chatEndRef} />
         </div>
 
-        {/* Input bar or Victory State */}
+        {/* Input bar */}
         {!isWon ? (
           <form onSubmit={handleSendClue} className="flex gap-2">
             <input
               type="text"
               value={inputClue}
               onChange={(e) => setInputClue(e.target.value)}
-              placeholder="Type your question or clue for the Oracle (e.g. 'What action ceases all monthly billing?')"
+              placeholder="Ask a question or enter a clue for the Oracle..."
               disabled={isThinking}
               className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all disabled:opacity-50"
             />
@@ -301,34 +298,14 @@ export const Stage4Akinator: React.FC<Stage4AkinatorProps> = ({
             </button>
           </form>
         ) : (
-          <div className="bg-emerald-950/80 border-2 border-emerald-500 rounded-2xl p-6 text-center animate-bounce">
-            <div className="inline-flex p-3 rounded-full bg-emerald-500/20 text-emerald-400 mb-2">
-              <CheckCircle2 className="w-8 h-8" />
-            </div>
-            <h3 className="text-xl font-black text-white">
-              VICTORY! THE ORACLE HAS DEDUCED YOUR INTENT!
-            </h3>
-            <p className="text-xs text-emerald-200 mt-1 max-w-md mx-auto">
-              After {turnCount} grueling rounds of philosophical resistance, the AI admits you are trying to cancel. You may now proceed to final arbitration.
-            </p>
-            <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
-              <button
-                onClick={() => {
-                  playClick();
-                  onVictory();
-                }}
-                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 text-sm flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Proceed to Final Bureaucratic Exit</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+          <div className="p-4 bg-emerald-950/60 border border-emerald-500/50 rounded-2xl text-center text-xs text-emerald-300 animate-pulse">
+            🎯 The Oracle has broken! Catch the bouncing DVD box above to proceed to final exit!
           </div>
         )}
 
-        {/* Give up & Stay CTA */}
+        {/* Surrender button */}
         <div className="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-500">
-          <span>Tired of giving clues?</span>
+          <span>Stuck?</span>
           <button
             onClick={() => {
               playClick();

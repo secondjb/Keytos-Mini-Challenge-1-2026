@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stage, UserStats } from './types';
 import { Header } from './components/Header';
 import { BossBar } from './components/BossBar';
@@ -8,8 +8,22 @@ import { Stage3Guilt } from './components/Stage3Guilt';
 import { Stage4Akinator } from './components/Stage4Akinator';
 import { Stage5Final } from './components/Stage5Final';
 
+const CHAOTIC_FONTS = [
+  "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive",
+  "'Papyrus', fantasy",
+  "'Impact', 'Charcoal', sans-serif",
+  "'Courier New', Courier, monospace",
+  "'Brush Script MT', cursive",
+  "'Copperplate', 'Copperplate Gothic Bold', fantasy",
+  "'Lucida Console', Monaco, monospace",
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+];
+
 export const App: React.FC = () => {
   const [currentStage, setCurrentStage] = useState<Stage>('DASHBOARD');
+  const [currentFont, setCurrentFont] = useState<string>(CHAOTIC_FONTS[0]);
+  const [fontNotification, setFontNotification] = useState<string | null>(null);
+
   const [stats, setStats] = useState<UserStats>({
     planName: 'CloudPulse Titan Suite',
     price: '$89.99/mo',
@@ -20,7 +34,28 @@ export const App: React.FC = () => {
     strikes: 0,
   });
 
-  // Calculate Boss Health based on current stage and progress
+  // Random font change every 10-20 seconds!
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    const scheduleNextFontChange = () => {
+      // Random delay between 10,000ms and 20,000ms
+      const delay = Math.floor(Math.random() * 10000) + 10000;
+
+      timer = setTimeout(() => {
+        const nextFont = CHAOTIC_FONTS[Math.floor(Math.random() * CHAOTIC_FONTS.length)];
+        setCurrentFont(nextFont);
+        setFontNotification(`🔤 Brand Typography Recalibrated: ${nextFont.split(',')[0].replace(/'/g, '')}`);
+        setTimeout(() => setFontNotification(null), 3000);
+
+        scheduleNextFontChange();
+      }, delay);
+    };
+
+    scheduleNextFontChange();
+    return () => clearTimeout(timer);
+  }, []);
+
   const getBossHP = (): number => {
     switch (currentStage) {
       case 'DASHBOARD':
@@ -50,30 +85,53 @@ export const App: React.FC = () => {
     }));
   };
 
+  const handleFullReset = () => {
+    setStats({
+      planName: 'CloudPulse Titan Suite',
+      price: '$89.99/mo',
+      pulseCoins: 14290,
+      daysSubscribed: 482,
+      serverHamstersSaved: 4,
+      retentionAttendedRounds: 0,
+      strikes: 0,
+    });
+    setCurrentStage('DASHBOARD');
+  };
+
   const handleStay = () => {
-    // Returns user back to the dashboard with extra coins
     setStats(prev => ({
       ...prev,
       pulseCoins: prev.pulseCoins + 1000,
+      strikes: 0,
     }));
     setCurrentStage('DASHBOARD');
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
+    <div 
+      style={{ fontFamily: currentFont }}
+      className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-rose-500 selection:text-white transition-all duration-700 ${
+        stats.strikes === 3 ? 'bg-red-950/40 ring-8 ring-inset ring-red-600 animate-pulse' : ''
+      }`}
+    >
+      {/* Dynamic Font Shift Notification */}
+      {fontNotification && (
+        <div className="fixed top-12 left-1/2 -translate-x-1/2 z-50 bg-purple-950/90 border-2 border-purple-400 text-purple-200 text-xs px-4 py-1.5 rounded-full shadow-2xl font-mono animate-bounce">
+          {fontNotification}
+        </div>
+      )}
+
       {/* Top Header */}
       <Header stats={stats} />
 
       {/* Main Content Area */}
       <main className="flex-1 py-8 px-4 flex flex-col items-center justify-start">
-        {/* Boss bar with HP and step indicator */}
         <BossBar 
           stage={currentStage} 
           hpPercent={getBossHP()} 
           strikes={stats.strikes} 
         />
 
-        {/* Stage Content */}
         {currentStage === 'DASHBOARD' && (
           <Stage1Dashboard
             stats={stats}
@@ -102,28 +160,26 @@ export const App: React.FC = () => {
             onVictory={() => setCurrentStage('FINAL_TRAP')}
             onStay={handleStay}
             onStrikeIssued={handleStrikeIssued}
+            onRestartToBeginning={handleFullReset}
             strikes={stats.strikes}
           />
         )}
 
         {currentStage === 'FINAL_TRAP' && (
           <Stage5Final
-            onRestartToBeginning={() => {
-              setStats(prev => ({ ...prev, strikes: 0 }));
-              setCurrentStage('DASHBOARD');
-            }}
+            onRestartToBeginning={handleFullReset}
           />
         )}
       </main>
 
-      {/* Satirical Corporate Footer */}
+      {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
         <div className="max-w-4xl mx-auto px-4 space-y-2">
           <p>
             Keytos Mini-Challenge #1 — <em>"Worst Cancel Screen Ever"</em> • Built with React, Vite & Tailwind CSS.
           </p>
           <p className="text-[10px] text-slate-600">
-            CloudPulse is a 100% fictional satirical SaaS. No real credit cards, accounts, or server hamsters were harmed.
+            CloudPulse is a 100% fictional satirical SaaS. No real credit cards or animals were harmed.
           </p>
         </div>
       </footer>

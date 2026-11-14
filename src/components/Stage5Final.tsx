@@ -1,13 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCheck, AlertTriangle, FileText, PartyPopper } from 'lucide-react';
-import { playFanfare } from '../engine/soundEffects';
+import { CheckCheck, AlertTriangle, FileText, PartyPopper, Award, Sparkles, CheckCircle2 } from 'lucide-react';
+import { playFanfare, playClick } from '../engine/soundEffects';
 
 interface Stage5FinalProps {
   onRestartToBeginning: () => void;
 }
 
 export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }) => {
+  const [hasWonFinal, setHasWonFinal] = useState<boolean>(false);
+  const [bouncingPos, setBouncingPos] = useState<{ x: number; y: number }>({ x: 30, y: 80 });
+  const posRef = useRef<{ x: number; y: number; vx: number; vy: number }>({
+    x: 30,
+    y: 80,
+    vx: 3,
+    vy: 2.5
+  });
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  // Bouncing DVD animation for the true escape button in Stage 5!
+  useEffect(() => {
+    let animId: number;
+
+    const animateDvd = () => {
+      const btn = buttonRef.current;
+      const width = btn ? btn.offsetWidth : 320;
+      const height = btn ? btn.offsetHeight : 60;
+
+      const maxX = window.innerWidth - width - 20;
+      const maxY = window.innerHeight - height - 20;
+
+      let { x, y, vx, vy } = posRef.current;
+      x += vx;
+      y += vy;
+
+      if (x <= 10) {
+        x = 10;
+        vx = Math.abs(vx);
+      } else if (x >= maxX) {
+        x = maxX;
+        vx = -Math.abs(vx);
+      }
+
+      if (y <= 10) {
+        y = 10;
+        vy = Math.abs(vy);
+      } else if (y >= maxY) {
+        y = maxY;
+        vy = -Math.abs(vy);
+      }
+
+      posRef.current = { x, y, vx, vy };
+      setBouncingPos({ x, y });
+      animId = requestAnimationFrame(animateDvd);
+    };
+
+    animId = requestAnimationFrame(animateDvd);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
   const handleMistakeAndRestore = () => {
     playFanfare();
     confetti({
@@ -15,18 +66,46 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
       spread: 80,
       origin: { y: 0.6 }
     });
-    // Loop back to start after momentary celebration!
     setTimeout(() => {
       onRestartToBeginning();
     }, 600);
   };
 
-  return (
-    <div className="max-w-3xl mx-auto px-4 pb-20">
-      <div className="bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+  const handleTrueVictoryClick = () => {
+    playFanfare();
+    confetti({
+      particleCount: 250,
+      spread: 120,
+      origin: { y: 0.4 }
+    });
+    setHasWonFinal(true);
+  };
 
+  return (
+    <div className="max-w-3xl mx-auto px-4 pb-20 relative">
+      {/* FINAL ESCAPE BOUNCING DVD BUTTON */}
+      {!hasWonFinal && (
+        <div
+          ref={buttonRef}
+          style={{
+            position: 'fixed',
+            left: `${bouncingPos.x}px`,
+            top: `${bouncingPos.y}px`,
+            zIndex: 50,
+          }}
+          className="select-none"
+        >
+          <button
+            onClick={handleTrueVictoryClick}
+            className="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 hover:from-rose-500 hover:to-pink-500 text-white font-black py-3 px-6 rounded-2xl shadow-2xl border-2 border-white text-xs sm:text-sm flex items-center gap-2 cursor-pointer transition-transform active:scale-95 animate-pulse"
+          >
+            <span>🎯 CATCH ME: PERMANENTLY FINALIZE CANCELLATION</span>
+          </button>
+        </div>
+      )}
+
+      {/* Main Notice Box */}
+      <div className="bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center">
         <div className="inline-flex p-3 rounded-2xl bg-slate-800 border border-slate-700 text-amber-400 mb-4 shadow-inner">
           <FileText className="w-10 h-10" />
         </div>
@@ -39,7 +118,7 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
           Notice of Non-Declination De-Enrollment
         </h2>
 
-        {/* The triple-negative statements */}
+        {/* Triple Negative Statements */}
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 my-6 text-left space-y-4">
           <div className="flex items-start gap-3">
             <CheckCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -60,7 +139,7 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
           </div>
         </div>
 
-        {/* Big circular trap button requested by user */}
+        {/* Prominent circular trap button */}
         <div className="space-y-4 my-8">
           <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
             Second Thoughts? Regret setting in?
@@ -79,16 +158,51 @@ export const Stage5Final: React.FC<Stage5FinalProps> = ({ onRestartToBeginning }
           </p>
         </div>
 
-        {/* Real True Completion acknowledgment */}
-        <div className="mt-12 pt-6 border-t border-slate-800/80 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-2">
-            🏆 CHALLENGE OBJECTIVE ACHIEVED: HOSTILE YET SOLVABLE
-          </div>
-          <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-            You successfully navigated the Caribbean Giveaway, defeated the double-negative traps, outwitted the 5-round Reverse Akinator Retention Oracle without saying banned words, and arrived at the final exit screen.
-          </p>
+        {/* How to win clue */}
+        <div className="mt-8 pt-4 border-t border-slate-800/80 text-xs text-slate-500">
+          <span>To officially finish and claim your freedom: </span>
+          <span className="text-pink-400 font-bold">Catch the bouncing pink target floating across the screen!</span>
         </div>
       </div>
+
+      {/* FREEDOM VICTORY MODAL */}
+      {hasWonFinal && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg flex items-center justify-center p-4">
+          <div className="bg-slate-900 border-4 border-emerald-500 rounded-3xl p-8 max-w-lg w-full text-center shadow-2xl relative animate-bounce">
+            <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400 mx-auto flex items-center justify-center mb-4">
+              <Award className="w-10 h-10" />
+            </div>
+
+            <h2 className="text-3xl font-black text-white">
+              CERTIFICATE OF ETERNAL FREEDOM
+            </h2>
+
+            <p className="text-emerald-300 font-mono text-sm mt-2">
+              Status: 100% UN-SUBSCRIBED & DISCONNECTED!
+            </p>
+
+            <p className="text-xs text-slate-300 mt-4 leading-relaxed">
+              Against all odds, you outsmarted the Caribbean Cruise bribe, conquered the sobriety field test, outwitted the Reverse Akinator without banned words, and caught the bouncing DVD exit logo.
+            </p>
+
+            <div className="my-6 p-4 rounded-xl bg-slate-950 border border-slate-800 text-left text-xs font-mono text-slate-400 space-y-1">
+              <div>🏆 Hackathon Submission Status: Complete</div>
+              <div>⚡ Final Resistance: 100% Broken</div>
+              <div>🐹 Hamster #4: Respects your determination</div>
+            </div>
+
+            <button
+              onClick={() => {
+                playClick();
+                onRestartToBeginning();
+              }}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3.5 px-6 rounded-xl text-sm"
+            >
+              Play The Gauntlet Again ↺
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
